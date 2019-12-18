@@ -2,7 +2,7 @@
 CanSat Competition 2019-2020. Project Meteor, Wolfert Lyceum
 
 
-ENG
+---- ENG --------------------------
 
 We, a group of 5 students from Wolfert Lyceum, joined the 2019-2020 CanSat Competition in the Netherlands, under the name “Project Meteor”.
 
@@ -12,7 +12,7 @@ We are currently searching for sponsors willing to help us with this project. If
 
 You can contact us by sending an email to cansatwolfert@gmail.com or via Social Media under the name @NLProjectMeteor on Twitter and Instagram.
 
-NL
+---- NL --------------------------
 
 Wij, een groep van 5 studenten van Wolfert Lyceum, doen mee met de 2019-2020 CanSat competitie in Nederland, onder de naam "Project Meteor".
 
