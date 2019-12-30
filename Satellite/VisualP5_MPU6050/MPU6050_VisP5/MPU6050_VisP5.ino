@@ -129,14 +129,14 @@ void calculate_IMU_error() {
   GyroErrorY = GyroErrorY / 200;
   GyroErrorZ = GyroErrorZ / 200;
   // Print the error values on the Serial Monitor
-  Serial.print("AccErrorX: ");
-  Serial.println(AccErrorX);
-  Serial.print("AccErrorY: ");
-  Serial.println(AccErrorY);
-  Serial.print("GyroErrorX: ");
-  Serial.println(GyroErrorX);
-  Serial.print("GyroErrorY: ");
-  Serial.println(GyroErrorY);
-  Serial.print("GyroErrorZ: ");
-  Serial.println(GyroErrorZ);
+//  Serial.print("AccErrorX: ");
+//  Serial.println(AccErrorX);
+//  Serial.print("AccErrorY: ");
+//  Serial.println(AccErrorY);
+//  Serial.print("GyroErrorX: ");
+//  Serial.println(GyroErrorX);
+//  Serial.print("GyroErrorY: ");
+//  Serial.println(GyroErrorY);
+//  Serial.print("GyroErrorZ: ");
+//  Serial.println(GyroErrorZ);
 }
