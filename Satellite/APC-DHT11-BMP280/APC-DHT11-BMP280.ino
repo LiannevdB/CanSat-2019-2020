@@ -12,7 +12,7 @@
 #define BMP_MOSI 6 
 #define BMP_CS 7
 
-int DHT_DATA = A1;
+int DHT_DATA = A0;
 
 // ------------------------------------------------------------------------------------------------------------------------------
 
@@ -48,9 +48,9 @@ void loop() {
 
   // Testing APC220
   (number ++);
-  Serial.print ("APC220 test   ");
+  Serial.print ("APC220   ");
   Serial.println (number);
-  mySerial.print ("APC220 test   ");
+  mySerial.print ("APC220   ");
   mySerial.println (number);
 
   // Print sensor data
@@ -111,13 +111,13 @@ void printTemp() {
 
 void printPres() {
   Serial.print("Current Pressure: ");
-  Serial.print(bmp.readPressure());
-  Serial.print(" Pa");
+  Serial.print(bmp.readPressure() / 1000);
+  Serial.print(" kPa");
   Serial.println();
   
   mySerial.print("Current Pressure: ");
-  mySerial.print(bmp.readPressure());
-  mySerial.print(" Pa");
+  mySerial.print(bmp.readPressure() / 1000);
+  mySerial.print(" kPa");
   mySerial.println();
 }
 
