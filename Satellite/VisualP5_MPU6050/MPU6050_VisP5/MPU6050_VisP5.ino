@@ -15,7 +15,7 @@ float elapsedTime, currentTime, previousTime;
 int c = 0;
 
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(9600);
   Wire.begin();                      // Initialize comunication
   Wire.beginTransmission(MPU);       // Start communication with MPU6050 // MPU=0x68
   Wire.write(0x6B);                  // Talk to the register 6B
@@ -36,11 +36,11 @@ void setup() {
   */
   // Call this function if you need to get the IMU error values for your module
   calculate_IMU_error();
-  delay(20);
+  delay(1000);
 
 }
 
-void loop() {
+void loop() {  
   // === Read acceleromter data === //
   Wire.beginTransmission(MPU);
   Wire.write(0x3B); // Start with register 0x3B (ACCEL_XOUT_H)
@@ -51,8 +51,8 @@ void loop() {
   AccY = (Wire.read() << 8 | Wire.read()) / 16384.0; // Y-axis value
   AccZ = (Wire.read() << 8 | Wire.read()) / 16384.0; // Z-axis value
   // Calculating Roll and Pitch from the accelerometer data
-  accAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI) - 0.58; // AccErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
-  accAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI) + 1.58; // AccErrorY ~(-1.58)
+  accAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI) - AccErrorX; // AccErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
+  accAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI) - AccErrorY; // AccErrorY ~(-1.58)
 
   // === Read gyroscope data === //
   previousTime = currentTime;        // Previous time is stored before the actual time read
@@ -65,10 +65,10 @@ void loop() {
   GyroX = (Wire.read() << 8 | Wire.read()) / 131.0; // For a 250deg/s range we have to divide first the raw value by 131.0, according to the datasheet
   GyroY = (Wire.read() << 8 | Wire.read()) / 131.0;
   GyroZ = (Wire.read() << 8 | Wire.read()) / 131.0;
-  // Correct the outputs with the calculated error values
-  GyroX = GyroX + 0.56; // GyroErrorX ~(-0.56)
-  GyroY = GyroY - 2; // GyroErrorY ~(2)
-  GyroZ = GyroZ + 0.79; // GyroErrorZ ~ (-0.8)
+
+  GyroX = GyroX - GyroErrorX;
+  GyroY = GyroY - GyroErrorY;
+  GyroZ = GyroZ - GyroErrorZ;
 
   // Currently the raw values are in degrees per seconds, deg/s, so we need to multiply by sendonds (s) to get the angle in degrees
   gyroAngleX = gyroAngleX + GyroX * elapsedTime; // deg/s * s = deg
@@ -109,6 +109,7 @@ void calculate_IMU_error() {
   AccErrorX = AccErrorX / 200;
   AccErrorY = AccErrorY / 200;
   c = 0;
+  
   // Read gyro values 200 times
   while (c < 200) {
     Wire.beginTransmission(MPU);
@@ -128,15 +129,17 @@ void calculate_IMU_error() {
   GyroErrorX = GyroErrorX / 200;
   GyroErrorY = GyroErrorY / 200;
   GyroErrorZ = GyroErrorZ / 200;
-  // Print the error values on the Serial Monitor
-//  Serial.print("AccErrorX: ");
-//  Serial.println(AccErrorX);
-//  Serial.print("AccErrorY: ");
-//  Serial.println(AccErrorY);
-//  Serial.print("GyroErrorX: ");
-//  Serial.println(GyroErrorX);
-//  Serial.print("GyroErrorY: ");
-//  Serial.println(GyroErrorY);
-//  Serial.print("GyroErrorZ: ");
-//  Serial.println(GyroErrorZ);
+  //Print the error values on the Serial Monitor
+  /*
+  Serial.print("AccErrorX: ");
+  Serial.println(AccErrorX);
+  Serial.print("AccErrorY: ");
+  Serial.println(AccErrorY);
+  Serial.print("GyroErrorX: ");
+  Serial.println(GyroErrorX);
+  Serial.print("GyroErrorY: ");
+  Serial.println(GyroErrorY);
+  Serial.print("GyroErrorZ: ");
+  Serial.println(GyroErrorZ);
+  */
 }
