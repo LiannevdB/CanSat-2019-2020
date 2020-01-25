@@ -165,7 +165,7 @@ void printData() {
   Serial.print(",");
   Serial.print(pres);
   Serial.print(",");
-  Serial.println(alt);
+  Serial.print(alt);
   //Serial.println("/");
   
   mySerial.print(temp);
@@ -174,7 +174,7 @@ void printData() {
   mySerial.print(",");
   mySerial.print(pres);
   mySerial.print(",");
-  mySerial.println(alt);
+  mySerial.print(alt);
   //mySerial.println(",");
 
   /* MPU DATA -- REMOVE PRINTLN PREV.
@@ -195,8 +195,11 @@ void printData() {
 }
 
 void printDesc() {
-  Serial.println("temp/hum/pres/alt/yaw/roll/pitch");
-  mySerial.println("temp/hum/pres/alt/yaw/roll/pitch");
+  Serial.println("temp/hum/pres/alt");
+  mySerial.println("temp/hum/pres/alt");
+  
+  //Serial.println("temp/hum/pres/alt/yaw/roll/pitch");
+  //mySerial.println("temp/hum/pres/alt/yaw/roll/pitch");
 }
 
 void calculate_IMU_error() {
