@@ -33,6 +33,7 @@ float roll, pitch, yaw;
 float AccErrorX, AccErrorY, GyroErrorX, GyroErrorY, GyroErrorZ;
 float elapsedTime, currentTime, previousTime;
 int c = 0;
+
 float acc_sens = 16384.0;
 float gyro_sens = 131.0;
 
@@ -49,6 +50,12 @@ void setup() {
   }
 
   // MPU6050
+  Wire.begin();
+  Wire.beginTransmission(MPU);       
+  Wire.write(0x6B);                 
+  Wire.write(0x00);                  
+  Wire.endTransmission(true);        
+  
   Wire.beginTransmission(MPU);
   Wire.write(0x1C);
   Wire.write(0x10);
@@ -62,9 +69,6 @@ void setup() {
   calculate_IMU_error();
   //print_IMU_error();
   //printDesc();
-  
-  
-  
 
 // ------------------------------------------------------------------------------------------------------------------------------
 
@@ -77,7 +81,7 @@ void loop() {
   MPU_Controller();
   printData();
 
-  delay(1000);
+  delay(100);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -131,8 +135,8 @@ void readGyro() {
 }
 
 void calcAngles() {
-  AccAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI) + AccErrorX; // AccErrorY
-  AccAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI) + AccErrorY; // AccErrorX
+  AccAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI) - AccErrorX; // AccErrorY
+  AccAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI) - AccErrorY; // AccErrorX
 
   gyroAngleX = gyroAngleX + GyroX * elapsedTime;
   gyroAngleY = gyroAngleY + GyroY * elapsedTime;
@@ -144,17 +148,17 @@ void calcAngles() {
 
 void printMPU() {
   Serial.print("Yaw: ");
-  Serial.println(yaw);
-  Serial.print("Roll: ");
-  Serial.println(roll);
-  Serial.print("Pitch: ");
+  Serial.print(yaw);
+  Serial.print("| Roll: ");
+  Serial.print(roll);
+  Serial.print("| Pitch: ");
   Serial.println(pitch);
 
   mySerial.print("Yaw: ");
-  mySerial.println(yaw);
-  mySerial.print("Roll: ");
-  mySerial.println(roll);
-  mySerial.print("Pitch: ");
+  mySerial.print(yaw);
+  mySerial.print(" | Roll: ");
+  mySerial.print(roll);
+  mySerial.print(" | Pitch: ");
   mySerial.println(pitch);
 }
 
@@ -166,7 +170,7 @@ void printData() {
   Serial.print(pres);
   Serial.print(",");
   Serial.print(alt);
-  //Serial.println("/");
+  Serial.print(",");
   
   mySerial.print(temp);
   mySerial.print(",");
@@ -175,23 +179,21 @@ void printData() {
   mySerial.print(pres);
   mySerial.print(",");
   mySerial.print(alt);
-  //mySerial.println(",");
+  mySerial.print(",");
 
-  /* MPU DATA -- REMOVE PRINTLN PREV.
-
-   Serial.print(yaw);
-  Serial.print("/");
+  Serial.print(yaw);
+  Serial.print(",");
   Serial.print(roll);
-  Serial.print("/");
+  Serial.print(",");
   Serial.println(pitch);
 
   mySerial.print(yaw);
-  mySerial.print("/");
+  mySerial.print(",");
   mySerial.print(roll);
-  mySerial.print("/");
+  mySerial.print(",");
   mySerial.println(pitch);
 
-  */
+  
 }
 
 void printDesc() {

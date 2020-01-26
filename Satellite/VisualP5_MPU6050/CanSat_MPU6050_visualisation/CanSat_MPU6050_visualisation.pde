@@ -1,5 +1,10 @@
+
+
+String serialPortLocation = "/dev/cu.usbserial-1410";
+
 /*
-    Arduino and MPU6050 IMU - 3D Visualization
+    Arduino and MPU6050 IMU - 3D Visualization Example 
+     by Dejan, https://howtomechatronics.com
 */
 
 import processing.serial.*;
@@ -11,34 +16,29 @@ Serial myPort;
 String data="";
 float roll, pitch,yaw;
 
-String serialPortLocation = "/dev/cu.usbserial-1410";
-
 void setup() {
   size (640, 480, P3D);
-  myPort = new Serial(this, serialPortLocation, 9600); // starts the serial communication
+  myPort = new Serial(this, serialPortLocation, 19200); // starts the serial communication
   myPort.bufferUntil('\n');
 }
 
 void draw() {
-  text("Roll: " + int(roll) + "     Pitch: " + int(pitch), 50, 150);
-  
   translate(width/2, height/2, 0);
   background(233);
   textSize(22);
-  
+  text("Roll: " + int(roll) + "     Pitch: " + int(pitch), -100, 265);
 
   // Rotate the object
-  rotateX(radians(-pitch)); //-pitch
-  rotateZ(radians(-roll)); // -roll
-  rotateY(radians(yaw));   // yaw
+  rotateX(radians(-pitch));
+  rotateZ(radians(roll));
+  rotateY(radians(yaw));
   
   // 3D 0bject
   textSize(30);  
   fill(0, 76, 153);
-  box (150, 150, 150); // Draw box
+  box (300, 100, 200); // Draw box
   textSize(25);
   fill(255, 255, 255);
-  //text("Project Meteor", 0, 0, 0);
 
   //delay(10);
   //println("ypr:\t" + angleX + "\t" + angleY); // Print the values to check whether we are getting proper values
@@ -55,11 +55,11 @@ void serialEvent (Serial myPort) {
     // split the string at "/"
     String items[] = split(data, '/');
     if (items.length > 1) {
-      
+
       //--- Roll,Pitch in degrees
-      roll = float(items[4]);
-      pitch = float(items[5]);
-      yaw = float(items[6]);
+      yaw = float(items[4]);
+      roll = float(items[5]);
+      pitch = float(items[6]);
     }
   }
 }
