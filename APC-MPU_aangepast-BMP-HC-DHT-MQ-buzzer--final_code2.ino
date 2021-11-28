@@ -2,8 +2,8 @@
 // APC-220
 //###########################################################
 /*
- Met deze code kun je de APC220 module als transmitter testen. 
- De APC220 sluit je als volgt aan op een uno:
+ With this code, you can test the APC220 module as transmitter. 
+ How to connect the APC220 to the Arduino UNO:
  APC220   > UNO
  gnd      > gnd 
  VCC      > 5V
@@ -640,7 +640,6 @@ SoftwareSerial mySerial(10,11);
 // Some sensor boards have AD0 high, and the
 // I2C address thus becomes 0x69.
 #define MPU6050_I2C_ADDRESS 0x68
- 
  
 // Declaring an union for the registers and the axis values.
 // The byte order does not match the byte order of
