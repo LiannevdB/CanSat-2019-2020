@@ -1,0 +1,84 @@
+Wiring SD-cardreader
+GND  - GND
+VCC  - 5V
+MOSI - pin 11
+MISO - pin 12
+SCK  - pin 7
+//SCK used to be pin 13, but our PCB is too small
+CS   - pin 4 (for MKRZero SD: SDCARD_SS_PIN)
+
+Wiring APC220:
+APC220 > Arduino
+gnd > gnd
+vcc > 5V
+en > Not connected
+RXD > D3
+TXD > D2
+AUX > Not connected
+SET > Not connected
+*/
+
+#include <SPI.h>
+//#include <SD.h>
+#include <SoftwareSerial.h>
+#include "SdFat.h"
+SdFat SD;
+
+File myFile;
+SoftwareSerial mySerial(2, 3); 
+bool SDsuccess = false;
+int number = 0;
+void setup() {
+  // Open serial communications and wait for port to open:
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(4)) 
+  {
+    Serial.println("initialization failed!, writing to SD-card is skipped");
+  }
+  else
+  {
+    Serial.println("initialization done.");
+    // open the file. note that only one file can be open at a time,
+    // so you have to close this one before opening another.
+    myFile = SD.open("test.txt", FILE_WRITE);
+    // if the file opened okay, write to it:
+    if (myFile) 
+    {
+      Serial.println("Writing to test.txt...");
+      SDsuccess = true;
+    } 
+    else 
+    {
+      // if the file didn't open, print an error:
+      Serial.println("error opening test.txt, writing to SD-card is skipped");
+    }
+  }
+  mySerial.begin(9600);
+}
+
+void loop() {
+  if(mySerial.available()){
+    char input = mySerial.read();
+    ++number;
+    Serial.print(input);
+    if (SDsuccess) {
+      myFile.print(input);
+      if (number > 500 ) {
+        myFile.flush();//ensures all data is written to SD
+        number = 0;
+      }
+    }
+  }
+  if(Serial.available() > 1) {
+    String input;
+    String HPstring = "HP";
+    input = Serial.readString();
+    if (input.equals(HPstring)) {
+      mySerial.print(input);
+    }
+  }
+}
